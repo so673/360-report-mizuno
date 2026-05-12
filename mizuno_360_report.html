@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水野 — 360度評価レポート 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--primary:#40b680;--primary-dark:#2d8a5f;--primary-light:#e8f7f0;--gray-900:#1a1a1a;--gray-700:#3d3d3d;--gray-500:#6b6b6b;--gray-300:#c4c4c4;--gray-100:#f2f2f2;--gray-50:#f8f8f8;--white:#ffffff;--blue:#0080EE;--blue-light:#e5f2fd;--teal:#00C093;--teal-light:#e5faf5;--amber:#FFAA00;--amber-light:#fff7e5;--amber-dark:#b37800;--border:#e8e8e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'メイリオ',Meiryo,'Hiragino Kaku Gothic ProN',sans-serif;background:var(--white);color:var(--gray-900);font-size:14px;line-height:1.6}
+.site-header{background:var(--white);border-bottom:3px solid var(--primary);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-logo-mark{width:28px;height:28px;background:var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:bold;flex-shrink:0}
+.header-logo-text{font-size:14px;font-weight:bold;color:var(--gray-700)}
+.header-meta{font-size:11px;color:var(--gray-300)}
+.hero{background:linear-gradient(135deg,#40b680 0%,#2d9e6a 100%);padding:3.5rem 2rem 3rem;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;bottom:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.hero::before{content:'';position:absolute;right:80px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+.hero-inner{max-width:920px;margin:0 auto;position:relative}
+.hero-eyebrow{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+.hero h1{font-size:2.75rem;font-weight:bold;color:#fff;line-height:1.15;margin-bottom:.4rem}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:2.25rem}
+.hero-stats{display:flex;gap:1.25rem;flex-wrap:wrap}
+.hero-stat{background:rgba(255,255,255,.15);border-radius:10px;padding:.875rem 1.25rem;min-width:110px;border:1px solid rgba(255,255,255,.2)}
+.hero-stat-value{font-size:2rem;font-weight:bold;color:#fff;line-height:1}
+.hero-stat-label{font-size:11px;color:rgba(255,255,255,.65);margin-top:4px}
+.main{max-width:920px;margin:0 auto;padding:2.5rem 2rem 4rem}
+.section{margin-bottom:2.5rem}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.125rem}
+.section-marker{width:4px;height:22px;background:var(--primary);border-radius:2px;flex-shrink:0}
+.section-title{font-size:16px;font-weight:bold;color:var(--gray-900)}
+.section-sub{font-size:11px;color:var(--gray-300);margin-left:auto}
+.summary-cards{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;margin-bottom:2.5rem}
+.scard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:12px 12px 0 0}
+.scard.main-score::before{background:var(--primary)}
+.scard.best::before{background:var(--teal)}
+.scard.focus::before{background:var(--amber)}
+.scard-label{font-size:11px;color:var(--gray-500);margin-bottom:.5rem}
+.scard-value{font-size:2.5rem;font-weight:bold;line-height:1;color:var(--primary-dark)}
+.scard-denom{font-size:14px;font-weight:normal;color:var(--gray-300);margin-left:2px}
+.scard-name{font-size:15px;font-weight:bold;color:var(--gray-700);margin-top:4px}
+.scard-badge{display:inline-block;font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;margin-top:6px}
+.scard.best .scard-badge{background:var(--teal-light);color:#007a5e}
+.scard.focus .scard-badge{background:var(--amber-light);color:var(--amber-dark)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2.5rem}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem}
+.panel-title{font-size:11px;font-weight:bold;color:var(--gray-500);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1rem}
+.cat-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.cat-name{font-size:12px;color:var(--gray-700);width:104px;flex-shrink:0}
+.bar-track{flex:1;height:8px;background:var(--gray-100);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.cat-pill{font-size:11px;font-weight:bold;padding:2px 8px;border-radius:20px;flex-shrink:0;min-width:38px;text-align:center}
+.chart-wrap{position:relative;width:100%;height:220px}
+.item-section{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.cat-group-header{display:flex;align-items:center;justify-content:space-between;padding:.625rem 1.25rem;background:var(--gray-50);border-bottom:1px solid var(--border)}
+.cat-group-name{font-size:12px;font-weight:bold;color:var(--gray-700)}
+.cat-group-avg{font-size:12px;font-weight:bold}
+.item-row{display:grid;grid-template-columns:128px 52px 1fr;align-items:center;gap:.875rem;padding:.75rem 1.25rem;border-bottom:1px solid var(--border);transition:background .12s}
+.item-row:hover{background:var(--gray-50)}
+.item-row:last-child{border-bottom:none}
+.item-name{font-size:12px;color:var(--gray-700)}
+.item-avg-pill{font-size:11px;font-weight:bold;padding:3px 6px;border-radius:8px;text-align:center}
+.dist-chart{display:flex;align-items:flex-end;gap:5px;height:32px}
+.dist-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.dist-bar{width:100%;border-radius:2px 2px 0 0;min-height:2px}
+.dist-num{font-size:9px;color:var(--gray-500);line-height:1}
+.dist-lbl{font-size:9px;color:var(--gray-300);font-weight:bold;line-height:1}
+.comment-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ccard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.375rem 1.5rem}
+.ccard.improve{border-top:3px solid var(--amber)}
+.ccard.positive{border-top:3px solid var(--primary)}
+.ccard-type{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:bold;letter-spacing:.04em;margin-bottom:.875rem}
+.ccard-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ccard.improve .ccard-type{color:var(--amber-dark)}
+.ccard.positive .ccard-type{color:var(--primary-dark)}
+.ccard.improve .ccard-dot{background:var(--amber)}
+.ccard.positive .ccard-dot{background:var(--primary)}
+.ccard-text{font-size:13px;line-height:1.85;color:var(--gray-700)}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--gray-300);background:var(--gray-50);border:1px solid var(--border);border-radius:20px;padding:3px 9px;margin-top:.875rem}
+.footer{background:var(--gray-50);border-top:1px solid var(--border);text-align:center;padding:1.5rem;font-size:11px;color:var(--gray-300)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade{opacity:0;animation:fadeUp .45s ease forwards}
+.fade:nth-child(1){animation-delay:.04s}.fade:nth-child(2){animation-delay:.09s}.fade:nth-child(3){animation-delay:.14s}.fade:nth-child(4){animation-delay:.19s}.fade:nth-child(5){animation-delay:.24s}
+@media(max-width:640px){
+  .hero{padding:2rem 1.25rem}.main{padding:1.5rem 1.25rem 3rem}
+  .summary-cards{grid-template-columns:1fr 1fr}.summary-cards .scard:first-child{grid-column:1/-1}
+  .two-col,.comment-grid{grid-template-columns:1fr}
+  .item-row{grid-template-columns:100px 46px 1fr;gap:.5rem;padding:.625rem 1rem}
+  .site-header{padding:0 1.25rem}.hero h1{font-size:2rem}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-logo">
+    <div class="header-logo-mark">360</div>
+    <span class="header-logo-text">360度評価レポート</span>
+  </div>
+  <span class="header-meta">2026 · CONFIDENTIAL</span>
+</header>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">360-DEGREE EVALUATION REPORT · 2026</div>
+    <h1>水野</h1>
+    <div class="hero-sub">2026年4月〜5月実施 · 社員・業務委託メンバーによる評価</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">4.2</div><div class="hero-stat-label">総合平均 / 5.0</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">7</div><div class="hero-stat-label">回答者数</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">6</div><div class="hero-stat-label">評価カテゴリ</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">30</div><div class="hero-stat-label">評価項目数</div></div>
+    </div>
+  </div>
+</section>
+<main class="main">
+  <div class="summary-cards fade">
+    <div class="scard main-score">
+      <div class="scard-label">総合平均スコア</div>
+      <div class="scard-value">4.2<span class="scard-denom"> / 5.0</span></div>
+      <div style="font-size:11px;color:var(--gray-300);margin-top:5px">全30項目の平均</div>
+    </div>
+    <div class="scard best">
+      <div class="scard-label">最高カテゴリ</div>
+      <div class="scard-name">コミュニケーション</div>
+      <span class="scard-badge">4.34点</span>
+    </div>
+    <div class="scard focus">
+      <div class="scard-label">要注目カテゴリ</div>
+      <div class="scard-name">問題解決力</div>
+      <span class="scard-badge">3.80点</span>
+    </div>
+  </div>
+  <div class="section fade">
+    <div class="section-header">
+      <div class="section-marker"></div>
+      <span class="section-title">カテゴリ別スコア</span>
+    </div>
+    <div class="two-col">
+      <div class="panel"><div class="panel-title">平均スコア一覧</div><div id="cat-bars"></div></div>
+      <div class="panel"><div class="panel-title">レーダーチャート</div><div class="chart-wrap"><canvas id="radar" role="img" aria-label="水野さんカテゴリ別レーダーチャート"></canvas></div></div>
+    </div>
+  </div>
+  <div class="section fade">
+    <div class="section-header">
+      <div class="section-marker"></div>
+      <span class="section-title">項目別スコア詳細</span>
+      <span class="section-sub">平均点 ＋ 点数分布（5〜1点の人数）</span>
+    </div>
+    <div class="item-section" id="item-detail"></div>
+  </div>
+  <div class="section fade">
+    <div class="section-header">
+      <div class="section-marker"></div>
+      <span class="section-title">自由記述フィードバック</span>
+      <span class="section-sub">AI要約・匿名処理済み</span>
+    </div>
+    <div class="comment-grid">
+      <div class="ccard improve">
+        <div class="ccard-type"><span class="ccard-dot"></span>改善点・期待すること</div>
+        <p class="ccard-text">複数の回答者から、プロジェクト推進における目標設定や計画の具体化・細分化への期待が挙げられました。取り組み自体は評価されている一方で、個々の施策が点在して見える印象があり、何に向かって進んでいるかの方向性をより明確に共有してほしいという声が複数ありました。また、数字へのコミットメントを計画的に実行していくことへの期待も一部から寄せられています。さらに、対話の場面での集中度の波が周囲に伝わることがあり、安心して話せる環境づくりへの期待も挙がっています。</p>
+        <div class="ai-badge">✦ AI要約済み · 匿名処理</div>
+      </div>
+      <div class="ccard positive">
+        <div class="ccard-type"><span class="ccard-dot"></span>ポジティブフィードバック</div>
+        <p class="ccard-text">常に前向きで新しいことに挑戦し続ける姿勢が複数の回答者から高く評価されており、安定したメンタルと責任感ある行動が周囲の信頼を集めているという声がありました。相談しやすい雰囲気づくりや、場を締める存在としての貢献も評価されています。一方で、メインサービスの質へのこだわりをさらに深めてほしいという期待も一部から寄せられています。</p>
+        <div class="ai-badge">✦ AI要約済み · 匿名処理</div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="footer">360度評価レポート · 水野 · 2026 · このレポートは関係者限りの機密情報です</footer>
+<script>
+const DATA={categories:[
+  {name:"目標達成志向",avg:4.09,items:[{name:"目標達成",avg:4.29,dist:{5:3,4:3,3:1,2:0,1:0}},{name:"計画立案",avg:3.14,dist:{5:1,4:1,3:3,2:2,1:0}},{name:"情報収集",avg:4.29,dist:{5:3,4:3,3:1,2:0,1:0}},{name:"適応性",avg:4.43,dist:{5:4,4:2,3:1,2:0,1:0}},{name:"協力",avg:4.29,dist:{5:2,4:5,3:0,2:0,1:0}}]},
+  {name:"問題解決力",avg:3.80,items:[{name:"課題設定",avg:4.00,dist:{5:1,4:5,3:1,2:0,1:0}},{name:"目標設定",avg:3.57,dist:{5:1,4:3,3:2,2:1,1:0}},{name:"段取り",avg:3.57,dist:{5:1,4:3,3:2,2:1,1:0}},{name:"改善",avg:4.14,dist:{5:2,4:4,3:1,2:0,1:0}},{name:"効率化",avg:3.71,dist:{5:1,4:3,3:3,2:0,1:0}}]},
+  {name:"コミュニケーション",avg:4.34,items:[{name:"意図の把握",avg:4.29,dist:{5:3,4:3,3:1,2:0,1:0}},{name:"情報の共有",avg:4.14,dist:{5:3,4:2,3:2,2:0,1:0}},{name:"他者への敬意",avg:4.71,dist:{5:5,4:2,3:0,2:0,1:0}},{name:"他者への態度",avg:4.43,dist:{5:4,4:2,3:1,2:0,1:0}},{name:"自己客観視",avg:4.14,dist:{5:2,4:4,3:1,2:0,1:0}}]},
+  {name:"リーダーシップ",avg:4.14,items:[{name:"ビジョン",avg:3.71,dist:{5:2,4:2,3:2,2:1,1:0}},{name:"信頼性",avg:4.43,dist:{5:4,4:2,3:1,2:0,1:0}},{name:"柔軟性",avg:4.29,dist:{5:3,4:3,3:1,2:0,1:0}},{name:"フォロースキル",avg:4.29,dist:{5:2,4:5,3:0,2:0,1:0}},{name:"育成指導",avg:4.00,dist:{5:3,4:2,3:1,2:1,1:0}}]},
+  {name:"人材育成",avg:4.26,items:[{name:"適切な目標設定",avg:3.43,dist:{5:1,4:2,3:3,2:1,1:0}},{name:"公正な評価",avg:4.29,dist:{5:3,4:3,3:1,2:0,1:0}},{name:"サポート",avg:4.57,dist:{5:4,4:3,3:0,2:0,1:0}},{name:"褒める力",avg:4.57,dist:{5:4,4:3,3:0,2:0,1:0}},{name:"思考の促進",avg:4.43,dist:{5:4,4:2,3:1,2:0,1:0}}]},
+  {name:"組織づくり",avg:4.29,items:[{name:"方向性の共有",avg:4.14,dist:{5:3,4:3,3:0,2:1,1:0}},{name:"牽引力",avg:4.00,dist:{5:1,4:5,3:1,2:0,1:0}},{name:"対応力",avg:4.00,dist:{5:2,4:3,3:2,2:0,1:0}},{name:"成果の共有",avg:4.43,dist:{5:3,4:4,3:0,2:0,1:0}},{name:"対話",avg:4.86,dist:{5:6,4:1,3:0,2:0,1:0}}]},
+]};
+function ss(s){
+  if(s>=4.5)return{bg:'#e8f7f0',fg:'#2d8a5f',bar:'#40b680'};
+  if(s>=4.0)return{bg:'#e5faf5',fg:'#007a5e',bar:'#00C093'};
+  if(s>=3.5)return{bg:'#e5f2fd',fg:'#0058b0',bar:'#0080EE'};
+  if(s>=3.0)return{bg:'#fff7e5',fg:'#b37800',bar:'#FFAA00'};
+  return{bg:'#fdecea',fg:'#c0392b',bar:'#e74c3c'};
+}
+const barsEl=document.getElementById('cat-bars');
+DATA.categories.forEach(c=>{
+  const s=ss(c.avg);
+  barsEl.innerHTML+=`<div class="cat-row"><span class="cat-name">${c.name}</span><div class="bar-track"><div class="bar-fill" style="width:${(c.avg/5*100).toFixed(1)}%;background:${s.bar}"></div></div><span class="cat-pill" style="background:${s.bg};color:${s.fg}">${c.avg.toFixed(1)}</span></div>`;
+});
+new Chart(document.getElementById('radar'),{
+  type:'radar',
+  data:{labels:DATA.categories.map(c=>c.name),datasets:[{data:DATA.categories.map(c=>c.avg),backgroundColor:'rgba(64,182,128,0.12)',borderColor:'#40b680',borderWidth:2.5,pointBackgroundColor:'#40b680',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:5}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:9,family:'メイリオ'},backdropColor:'transparent',color:'#c4c4c4'},pointLabels:{font:{size:11,family:'メイリオ'},color:'#3d3d3d'},grid:{color:'#eeeeee'},angleLines:{color:'#e8e8e8'}}}}
+});
+const detailEl=document.getElementById('item-detail');
+DATA.categories.forEach(cat=>{
+  const cs=ss(cat.avg);
+  let html=`<div class="cat-group-header"><span class="cat-group-name">${cat.name}</span><span class="cat-group-avg" style="color:${cs.fg}">平均 ${cat.avg.toFixed(1)}</span></div>`;
+  cat.items.forEach(it=>{
+    const is=ss(it.avg);
+    const dh=[5,4,3,2,1].map(s=>{const n=it.dist[s];const h=Math.max(Math.round((n/7)*24),n>0?3:0);return`<div class="dist-col"><div style="height:${24-h}px"></div><div class="dist-bar" style="height:${h}px;background:${n>0?is.bar:'#eeeeee'}"></div><div class="dist-num">${n}</div><div class="dist-lbl">${s}</div></div>`;}).join('');
+    html+=`<div class="item-row"><span class="item-name">${it.name}</span><span class="item-avg-pill" style="background:${is.bg};color:${is.fg}">${it.avg.toFixed(1)}</span><div class="dist-chart">${dh}</div></div>`;
+  });
+  detailEl.innerHTML+=html;
+});
+</script>
+</body>
+</html>
